@@ -2,6 +2,7 @@
 #define LINKED_LIST_HPP
 
 #include "List.hpp"
+#include <functional>
 #include <iostream>
 using namespace std;
 
@@ -13,8 +14,16 @@ class LinkedList : public List<T> {
             T value;
             Node* next;
 
-            Node(T v = T(), Node* n = nullptr)
-            : value(v), next(n) { }
+            Node(const T& v = T(), Node* n = nullptr)
+            { 
+                value = v;
+                next = n;
+            }
+
+            ~Node() {
+                cout << "NODE DESTRUCTOR" << endl;
+            }
+
         };
 
         // a pointer to the front of the list
@@ -62,6 +71,14 @@ class LinkedList : public List<T> {
         // replace the element at the given position (argument 1) with
         // the value given (argument 2)
         virtual void replace(int, const T&) override;
+
+        // Retrieve an element based on a lambda
+        virtual T* retrieveElement(function<bool(T)> f);
+
+        // Delete an element based on a lambda
+        virtual T* removeElement(function<bool(T)> f);
+
+        virtual void simplePrint(ostream&);
 
         // overloaded stream insertion operator to make printing easier
         template <typename U>

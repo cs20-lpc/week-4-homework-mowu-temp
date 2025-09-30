@@ -24,20 +24,15 @@ LinkedList<T>::~LinkedList() {
 template <typename T>
 void LinkedList<T>::append(const T& elem) {
     Node* n = new Node(elem);
-
     if (head == nullptr) {
         head = n;
-    }
-    else {
+    } else {
         Node* curr = head;
-
         while (curr->next != nullptr) {
             curr = curr->next;
         }
-
         curr->next = n;
     }
-
     this->length++;
 }
 
@@ -77,13 +72,10 @@ T LinkedList<T>::getElement(int position) const {
     if (position < 0 || position >= this->length) {
         throw string("getElement: error, position out of bounds");
     }
-    
     Node* curr = head;
-
     for (int i = 0; i < position; i++) {
         curr = curr->next;
     }
-
     return curr->value;
 }
 
@@ -158,6 +150,67 @@ void LinkedList<T>::replace(int position, const T& elem) {
     curr->value = elem;
 }
 
+
+template <typename T>
+T* LinkedList<T>::retrieveElement(function<bool(T)> f) {
+    cout << "RETRIEVE ELEMENT" << endl;
+    Node* curr = head;
+    cout << curr->value << endl;
+
+    while(curr != nullptr && !f(curr->value)) {
+        cout << curr->value << endl;
+
+        curr = curr->next;
+        
+    }  
+
+    cout << "Hey";
+    // simplePrint(cout);
+    
+
+    if (curr == nullptr) {
+        return nullptr;
+    } else {
+        return &(curr->value);
+    }
+};
+
+template <typename T>
+T* LinkedList<T>::removeElement(function<bool(T)> f) {
+    if (getLength() == 0) {
+        return nullptr;
+    }
+    if (f(head->value)) {
+        cout << "here" << endl;
+        T* result = &(head->value);
+        Node* oldHead = head;
+        head = head->next;
+        delete oldHead;
+        oldHead = nullptr;
+        this->length -= 1;
+        return result;
+    }
+
+    Node* prev = head;
+    Node* curr = head->next;
+    while(curr != nullptr && !f(curr->value)) {
+        prev = curr;
+        curr = curr->next;
+    }
+    if (curr == nullptr) {
+        return nullptr;
+    } else { 
+        T* result = &(curr->value);
+        prev->next = curr->next;
+        delete curr;
+        curr = nullptr;
+        this->length -= 1;
+        return result;
+    }
+
+}
+
+
 template <typename T>
 ostream& operator<<(ostream& outStream, const LinkedList<T>& myObj) {
     if (myObj.isEmpty()) {
@@ -176,4 +229,13 @@ ostream& operator<<(ostream& outStream, const LinkedList<T>& myObj) {
     }
 
     return outStream;
+}
+
+template <typename T>
+void LinkedList<T>::simplePrint(ostream& outStream) {
+    Node* curr = head;
+    while(curr != nullptr) {
+        outStream << (curr->value) << endl;
+        curr = curr->next;
+    }
 }

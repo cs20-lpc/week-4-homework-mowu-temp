@@ -1,22 +1,33 @@
-// TO DO:  Student class definition  here.
+#ifndef STUDENT_HPP
+#define STUDENT_HPP
+
 #include <iostream>
 #include <vector>
+
+#include "Course.hpp"
 
 using namespace std;
 
 class Student {
     protected: 
-        int id = 0;
+        string id = "0";
         string name = "PLACEHOLDER";
-        double gpa = 0.0;
-        vector<int> enrolled;
+        string gpa = "0.0";
+        vector<Course>* enrolled;
 
     public:
         Student();
-        Student(const int& id, const string& name_, const double& gpa_, const vector<int>& enrolled_);
-        Student(const Student& other);
+        Student(const string&, const string&, const string&);
         ~Student();
-        bool operator== (const Student& other);
-        ostream& operator<<(ostream& outStream, const Student& stu);
+        Student(const Student&);
+        Student& operator=(const Student&);
+
+        string getId() const;
+        void addCourse(const string&, const string&);
+
+        bool operator== (const Student&);
+        friend ostream& operator<<(ostream&, const Student&);
 
 };
+
+#endif
